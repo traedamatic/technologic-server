@@ -1,0 +1,10 @@
+---
+  - name: Install and update ubuntu core system
+    hosts: dev
+    remote_user: deployer
+    vars:
+      deploy_path: /var/www/development/merk
+      deploy_user: deployer
+    tasks:
+    - name: Register ssh key for deployer user
+      authorized_key: user={{ deploy_user }} key="{{ lookup('file', '~/.ssh/id_rsa.pub') }}"

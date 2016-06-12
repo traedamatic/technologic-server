@@ -1,0 +1,19 @@
+---
+  - name: Create a new ubuntu user
+    remote_user: root
+    hosts: technologic
+    vars_prompt:
+      - name: "user"
+        prompt: "What is the account name of the new user?"
+        private: no
+      - name: "realname"
+        prompt: "What is the real name of the new user?"
+        private: no
+      - name: "user_crypt_password"
+        prompt: "What is the crypt password of the new user"
+        private: no
+    tasks:
+      - name: create group technologic
+        group: name=technlogic state=present
+      - name: create the developer user
+        user: name={{ user }} comment={{ realname }} group=technlogic password={{ user_crypt_password}}
