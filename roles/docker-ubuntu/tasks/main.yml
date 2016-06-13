@@ -9,11 +9,14 @@
 
 - name: install pip
   become: yes
-  apt: name=python-pip state=present update_cache=yesq
+  apt: name=python-pip state=present update_cache=yes
 
-- name: install docker py
+- name: install pip packages
   become: yes
-  pip: name=docker_py state=present
+  pip: name={{ item }} state=present
+  with_items:
+    - docker_py
+    - docker-compose
 
 - name: install predocker packages
   become: yes
@@ -22,6 +25,7 @@
     - apt-transport-https
     - ca-certificates
     - apparmor
+    - python-yaml
 
 - name: install linux extras for kernel
   become: yes
@@ -42,6 +46,14 @@
 - name: enable docker
   become: yes
   service: name=docker enabled=yes
+
+- name: Install docker compose
+  become: yes
+  shell: curl -L https://github.com/docker/compose/releases/download/1.7.1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+
+- file: path=/usr/local/bin/docker-compose mode="u=rwx,go=rx"
+  become: yes
+
 
 - name: start docker
   become: yes

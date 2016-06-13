@@ -1,7 +1,6 @@
 ---
   - name: Install and update ubuntu core system
-    hosts: dev
-    remote_user: nicolas
+    hosts: technologic
     roles:
-      - role: ubuntu
+      - role: update-ubuntu
       - role: docker-ubuntu

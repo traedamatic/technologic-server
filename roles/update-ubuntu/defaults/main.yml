@@ -1,0 +1,5 @@
+---
+packages_to_install:
+  - curl
+  - vim
+  - sudo

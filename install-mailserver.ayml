@@ -1,0 +1,41 @@
+---
+  - name: Install a docker-based mailserver
+    hosts: technologic
+    vars_prompt:
+        - name: "hostname"
+          prompt: "What is the hostname of the server?"
+          private: no
+        - name: "domainname"
+          prompt: "What is the domainname of the server?"
+          private: no
+    tasks:
+      - name: Create mail server config dir and vmail dir
+        become: yes
+        file: path={{ item }} state=directory
+        with_items:
+          - "/var/vmail-config"
+          - "/var/vmail"
+      - name: Start docker based mailserver
+        docker_service:
+          project_name: flask
+          definition:
+            version: '2'
+
+            services:
+              mail:
+                image: tvial/docker-mailserver:latest
+                hostname: "{{hostname}}"
+                domainname: "{{domainname}}"
+                container_name: codebility-mailserver
+                ports:
+                - "25:25"
+                - "143:143"
+                - "587:587"
+                - "993:993"
+                volumes:
+                - /var/vmail/:/var/mail
+                - /var/vmail-config/:/tmp/docker-mailserver/
+
+            volumes:
+              maildata:
+                driver: local

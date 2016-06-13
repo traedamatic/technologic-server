@@ -2,6 +2,7 @@
 
 * define structure of server
 * create users for steffen and haithem
+* install letsencrypt
 * install zsh
 * install docker ()
 * install redmine  (backup)

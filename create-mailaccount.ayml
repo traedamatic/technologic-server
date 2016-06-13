@@ -1,0 +1,10 @@
+---
+- name: Create a new mail account and restart the mailserver
+  hosts: technologic
+  tasks:
+    - shell: >
+        docker run --rm \
+        -e MAIL_USER=user1@domain.tld \
+        -e MAIL_PASS=mypassword \
+        -ti tvial/docker-mailserver:latest \
+        /bin/sh -c 'echo "$MAIL_USER|$(doveadm pw -s CRAM-MD5 -u $MAIL_USER -p $MAIL_PASS)"' >> config/postfix-accounts.cf
