@@ -17,9 +17,12 @@
       - name: Create group technologic
         group: name={{ user_group }} state=present
       - name: Create the developer user
-        user: name={{ user }} comment={{ realname }} group={{ user_group }} password={{ user_crypt_password}}
+        user: name={{ user }} comment={{ realname }} group={{ user_group }} password={{ user_crypt_password}} shell=/usr/bin/zsh
       - name: Add ssh key for new user
         authorized_key: user={{ user }} key="{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+      - name: Add user to group ubuntu
+        become: yes
+        user: name={{ user }} append=yes groups=docker
       - name: Allow '{{ user_group }}' group to have sudo permissions with password
         lineinfile:
           backup: yes
@@ -27,4 +30,3 @@
           state: present
           regexp: "^%{{ user_group }}"
           line: '%technologic ALL=(ALL) ALL'
-

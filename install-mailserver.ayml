@@ -27,6 +27,8 @@
                 hostname: "{{hostname}}"
                 domainname: "{{domainname}}"
                 container_name: codebility-mailserver
+                environment:
+                  - SSL_TYPE=letsencrypt
                 ports:
                 - "25:25"
                 - "143:143"
