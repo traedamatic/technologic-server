@@ -1,0 +1,10 @@
+---
+  - name: Install letsencrypt
+    hosts: technologic
+    tasks:
+      - name: Download certbot and set folder permissions
+        get_url: url=https://dl.eff.org/certbot-auto dest=/etc/ mode="a+x"
+        become: yes
+      - name: Configure certbot-auto, install dependencies and update client
+        shell: /etc/certbot-auto
+        become: yes
