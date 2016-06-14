@@ -1,0 +1,21 @@
+---
+  - name: Install gitlab
+    hosts: technologic
+    tasks:
+      - name: Install dependencies
+        apt: name={{item}} state=present
+        become: yes
+        with_items:
+          - curl
+          - openssh-server
+          - ca-certificates
+          - postfix
+      - name: Install gitlab package server
+        shell: curl -sS https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | sudo bash
+        become: yes
+      - name: Install gitlab package
+        apt: name=gitlab-ce state=present
+        become: yes
+      - name: Configure and start gitlab
+        shell: gitlab-ctl reconfigure
+        become: yes
