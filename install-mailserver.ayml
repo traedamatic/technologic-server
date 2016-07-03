@@ -37,6 +37,7 @@
                 volumes:
                 - /var/vmail/:/var/mail
                 - /var/vmail-config/:/tmp/docker-mailserver/
+                - /etc/letsencrypt/:/etc/letsencrypt/
 
             volumes:
               maildata:

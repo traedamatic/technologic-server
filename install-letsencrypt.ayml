@@ -6,5 +6,6 @@
         get_url: url=https://dl.eff.org/certbot-auto dest=/etc/ mode="a+x"
         become: yes
       - name: Configure certbot-auto, install dependencies and update client
-        shell: /etc/certbot-auto
+        #TODO: customize it for random domains
+        shell: /etc/certbot-auto certonly -n --standalone --email postmaster@codebility.com -d mail.roadbees.com
         become: yes
