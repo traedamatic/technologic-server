@@ -29,16 +29,21 @@
                 container_name: codebility-mailserver
                 environment:
                   - SSL_TYPE=letsencrypt
+                  - ENABLE_FAIL2BAN=1
                 ports:
-                - "25:25"
-                - "143:143"
-                - "587:587"
-                - "993:993"
+                  - "25:25"
+                  - "143:143"
+                  - "587:587"
+                  - "993:993"
                 volumes:
-                - /var/vmail/:/var/mail
-                - /var/vmail-config/:/tmp/docker-mailserver/
-                - /etc/letsencrypt/:/etc/letsencrypt/
+                  - /var/vmail/:/var/mail
+                  - /var/vmail-config/:/tmp/docker-mailserver/
+                  - /etc/letsencrypt/:/etc/letsencrypt/
+                cap_add:
+                  - NET_ADMIN
 
             volumes:
               maildata:
                 driver: local
+
+
