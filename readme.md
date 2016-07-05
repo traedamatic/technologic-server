@@ -6,7 +6,13 @@ ubuntu 14.04 LTS server
 ## Python module
 
 * pip install cryptography
-* pip install passlib
+* pip install 
+
+## Ansible Galaxy Roles
+
+Please install all roles before executing a playbook with ```ansible-galaxy install ROLENAME```
+
+* geerlingguy.nginx
 
 ## Creating a user
 

@@ -1,0 +1,41 @@
+---
+  - name: Install a docker-based redmine
+    hosts: technologic
+    tasks:
+      - name: Create folder for redmine files, theme and plugins on host
+        become: yes
+        file: path={{ item }} state=directory owner=www-data group=www-data
+        with_items:
+          - "/var/redmine"
+          - "/var/redmine/themes"
+          - "/var/redmine/files"
+          - "/var/redmine/plugins"
+      - name: Start docker redmine and mysql server
+        docker_service:
+          project_name: redmine
+          definition:
+            version: '2'
+
+            services:
+              db:
+                image: mysql
+                container_name: codebility-redmine-database
+                environment:
+                  - MYSQL_ROOT_PASSWORD=84ysfdfhsd83hdksf
+                  - MYSQL_DATABASE=redmine
+
+              redmine:
+                image: redmine:3.2.3-passenger
+                container_name: codebility-redmine
+                links:
+                  - db:mysql
+                environment:
+                  - REDMINE_SECRET_KEY_BASE=34324234343443dsfsdfsdf2423
+                ports:
+                  - "6500:3000"
+                volumes:
+                  - /var/redmine/files:/usr/src/redmine/files
+                  - /var/redmine/themes:/usr/src/redmine/public/themes
+                  - /var/redmine/plugins:/usr/src/redmine/plugins
+
+

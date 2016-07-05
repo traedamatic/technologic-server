@@ -5,7 +5,7 @@
 * install letsencrypt
 * install zsh OK
 * install docker OK
-* install redmine (backup) openproject
+* install redmine (backup)
 * install mailserver (backup)
 * install owncloud 9 (backup)
 * install codebility.com site

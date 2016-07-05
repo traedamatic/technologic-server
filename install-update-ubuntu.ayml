@@ -2,11 +2,14 @@
   - name: Install and update ubuntu core system
     hosts: technologic
     roles:
-      # - role: update-ubuntu
-      # - role: docker-ubuntu
-    tasks:
-      - apt: name=zsh state=present
-        become: yes
-      - name: Download oh my zsh
-        get_url: url="https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh" dest="/tmp" mode=755
-      - shell: /tmp/install.sh
+       - role: update-ubuntu
+       - role: docker-ubuntu
+       - role: geerlingguy.nginx
+         become: yes
+         nginx_remove_default_vhost: true
+#    tasks:
+#      - apt: name=zsh state=present
+#        become: yes
+#      - name: Download oh my zsh
+#        get_url: url="https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh" dest="/tmp" mode=755
+#      - shell: /tmp/install.sh
