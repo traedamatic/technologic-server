@@ -31,11 +31,27 @@
                   - db:mysql
                 environment:
                   - REDMINE_SECRET_KEY_BASE=34324234343443dsfsdfsdf2423
+                  - REDMINE_DB_MYSQL=mysql
+                  - REDMINE_DB_USERNAME=root
+                  - REDMINE_DB_PASSWORD=84ysfdfhsd83hdksf
+                  - REDMINE_DB_DATABASE=redmine
                 ports:
                   - "6500:3000"
                 volumes:
                   - /var/redmine/files:/usr/src/redmine/files
                   - /var/redmine/themes:/usr/src/redmine/public/themes
                   - /var/redmine/plugins:/usr/src/redmine/plugins
+
+      - name: Copy new apache2 conf from template
+        become: yes
+        template: src=templates/redmine.conf dest=/etc/nginx/sites-available/redmine.conf
+
+      - name: Create link of apache2 conf
+        become: yes
+        file: src=/etc/nginx/sites-available/redmine.conf dest=/etc/nginx/sites-enabled/redmine.conf state=link
+
+      - name: Reload apache2 service
+        become: yes
+        service: name=nginx state=reloaded
 
 
