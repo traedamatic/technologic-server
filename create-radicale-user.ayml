@@ -1,0 +1,14 @@
+---
+  - name: Create a new radicale user
+    hosts: technologic
+    vars_prompt:
+      - name: "user"
+        prompt: "Please enter the htpasswd user?"
+        private: no
+      - name: "passwdline"
+        prompt: "Please enter the complete htpasswd (http://www.htaccesstools.com/htpasswd-generator/) line?"
+        private: no
+    tasks:
+      - name: Add or replace the htpasswd line
+        lineinfile: dest=/var/www/.htpasswd/radicale.htpasswd regexp="^{{ user }}:" line={{passwdline}}
+        become: yes

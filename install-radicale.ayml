@@ -1,0 +1,54 @@
+---
+  - name: Install radicale as docker container
+    hosts: technologic
+    vars:
+      - radicale_version: "1.1.1"
+      - radicale_path: "/var/lib/radicale"
+    tasks:
+
+      - name: Create htpasswd folder
+        file: path=/var/www/.htpasswd state=directory owner=www-data group=www-data
+        become: yes
+      - name: Create htpasswd fie
+        file: path=/var/www/.htpasswd/radicale.htpasswd state=touch owner=www-data group=www-data
+        become: yes
+      - name: Create radicale folder for configs
+        file: path={{radicale_path}} state=directory
+        become: yes
+      - name: Create radicale folder for data
+        file: path=/var/radicale-data state=directory
+        become: yes
+      - name: Copy radicale docker file and config to remote host
+        become: yes
+        template: src=radicale/{{ item }} dest=/var/lib/radicale/{{ item }}
+        with_items:
+          - config
+          - Dockerfile
+          - logging
+
+      - name: Build and run dockerized radicale container
+        docker_service:
+          project_name: codebility-radicale
+          definition:
+            version: '2'
+
+            services:
+              radicale:
+                build: "{{radicale_path}}"
+                container_name: codebility-radicale
+                ports:
+                  - "5232:5232"
+                volumes:
+                  - /var/radicale-data/:/var/collections/
+
+      - name: Create radicale nginx conf from template
+        become: yes
+        template: src=radicale/radicale.conf dest=/etc/nginx/sites-available/radicale.conf
+
+      - name: Create link of nginx conf
+        become: yes
+        file: src=/etc/nginx/sites-available/radicale.conf dest=/etc/nginx/sites-enabled/radicale.conf state=link
+
+      - name: Reload nginx service
+        become: yes
+        service: name=nginx state=reloaded
