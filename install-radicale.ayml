@@ -41,6 +41,8 @@
                 volumes:
                   - /var/radicale-data/:/var/collections/
 
+      #TODO: add ssl with lets encrypt, see gitlab install playbook
+
       - name: Create radicale nginx conf from template
         become: yes
         template: src=radicale/radicale.conf dest=/etc/nginx/sites-available/radicale.conf
